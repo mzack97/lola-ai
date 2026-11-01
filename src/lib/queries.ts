@@ -2,23 +2,20 @@ import "server-only";
 import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
 import { db, categories, courses, courseTeachers, enrollments, news, users } from "@/db";
 
-export type CourseCardData = {
-  id: string; title: string; slug: string; summary: string; coverUrl: string | null; format: string;
-  startDate: Date | null; schedule: string; capacity: number; category: string | null; teachers: string[]; approved: number;
-};
+export type { CourseCardData } from "@/components/Cards";
 
 export async function listCourses(opts: { categorySlug?: string; limit?: number; onlyPublished?: boolean } = {}) {
   const conds = [];
   if (opts.onlyPublished !== false) conds.push(eq(courses.published, true));
   if (opts.categorySlug) conds.push(eq(categories.slug, opts.categorySlug));
   const rows = await db
-    .select({ c: courses, category: categories.name })
+    .select({ c: courses, category: categories.name, categorySlug: categories.slug })
     .from(courses)
     .leftJoin(categories, eq(categories.id, courses.categoryId))
     .where(conds.length ? and(...conds) : undefined)
     .orderBy(desc(courses.createdAt))
     .limit(opts.limit ?? 100);
-  return decorate(rows.map((r) => ({ ...r.c, category: r.category })));
+  return decorate(rows.map((r) => ({ ...r.c, category: r.category, categorySlug: r.categorySlug })));
 }
 
 async function decorate<T extends { id: string }>(list: T[]) {

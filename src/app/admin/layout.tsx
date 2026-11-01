@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { requireUser } from "@/lib/auth";
+import { Aurora } from "@/components/motion";
 
 export const dynamic = "force-dynamic";
 
@@ -34,7 +35,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </div>
         </div>
       </aside>
-      <main className="min-w-0 p-5 sm:p-8 lg:p-10">{children}</main>
+      <main className="relative isolate min-w-0 p-5 sm:p-8 lg:p-10"><Aurora variant="cool" className="!fixed opacity-40" />{children}</main>
     </div>
   );
 }

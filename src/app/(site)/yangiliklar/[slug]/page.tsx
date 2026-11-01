@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { db, news } from "@/db";
 import { fmtDate } from "@/lib/utils";
+import { Aurora, Parallax, ProgressBar, Reveal, SplitHeadline } from "@/components/motion";
 
 async function get(slug: string) {
   const [n] = await db.select().from(news).where(eq(news.slug, slug)).limit(1);
@@ -10,23 +11,35 @@ async function get(slug: string) {
 }
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const n = await get((await params).slug);
-  return { title: n?.title ?? "Yangilik", description: n?.excerpt };
+  return { title: n?.title ?? "Yangilik", description: n?.excerpt, openGraph: n?.coverUrl ? { images: [n.coverUrl] } : undefined };
 }
 
 export default async function NewsPage({ params }: { params: Promise<{ slug: string }> }) {
   const n = await get((await params).slug);
   if (!n) notFound();
   return (
-    <article className="container-x max-w-3xl py-14">
-      <Link href="/yangiliklar" className="text-sm font-semibold text-muted hover:text-orange">← Yangiliklar</Link>
-      <div className="mt-6 font-mono text-xs text-muted">{fmtDate(n.publishedAt)}</div>
-      <h1 className="mt-2 h-title">{n.title}</h1>
+    <article className="relative pb-10 pt-32">
+      <ProgressBar />
+      <Aurora variant="warm" className="h-[70vh] opacity-70" />
+      <div className="container-x max-w-4xl">
+        <Reveal><Link href="/yangiliklar" className="btn-ghost btn-sm">← Yangiliklar</Link></Reveal>
+        <Reveal delay={0.1}><div className="mt-8 font-mono text-xs font-bold uppercase tracking-widest text-orange">{fmtDate(n.publishedAt)}</div></Reveal>
+        <SplitHeadline className="display mt-4 text-[clamp(2.4rem,5.5vw,4.4rem)]" parts={[{ t: n.title }]} />
+        {n.excerpt && <Reveal delay={0.3}><p className="mt-6 text-xl leading-8 text-ink-2">{n.excerpt}</p></Reveal>}
+      </div>
       {n.coverUrl && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={n.coverUrl} alt="" className="mt-8 w-full rounded-2xl object-cover" />
+        <Reveal delay={0.2} className="container-x mt-12">
+          <div className="relative aspect-video overflow-hidden rounded-[36px]">
+            <Parallax speed={50} className="absolute inset-[-8%]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={n.coverUrl} alt="" className="h-full w-full object-cover" />
+            </Parallax>
+          </div>
+        </Reveal>
       )}
-      {n.excerpt && <p className="mt-8 text-lg font-semibold text-ink-2">{n.excerpt}</p>}
-      <div className="prose-lola mt-6">{n.body}</div>
+      <div className="container-x mt-12 max-w-3xl">
+        <Reveal><div className="prose-lola text-[18px] leading-9">{n.body}</div></Reveal>
+      </div>
     </article>
   );
 }

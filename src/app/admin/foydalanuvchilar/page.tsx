@@ -4,6 +4,7 @@ import { db, users } from "@/db";
 import { createUser, updateUser } from "@/app/actions/admin";
 import { AdminHead, Flash } from "@/components/AdminUi";
 import { fmtDate, formatPhone, roleLabel } from "@/lib/utils";
+import { Avatar } from "@/components/Avatar";
 
 export default async function AdminUsers({ searchParams }: { searchParams: Promise<{ q?: string; rol?: string; ok?: string; err?: string }> }) {
   const sp = await searchParams;
@@ -40,6 +41,7 @@ export default async function AdminUsers({ searchParams }: { searchParams: Promi
         {list.map((u) => (
           <form key={u.id} action={updateUser} className="flex flex-wrap items-center gap-3 p-4 text-sm">
             <input type="hidden" name="id" value={u.id} /><input type="hidden" name="back" value={back} />
+            <Avatar src={u.avatarUrl} name={`${u.firstName} ${u.lastName}`} size={40} />
             <div className="min-w-[180px] flex-1">
               <div className="font-bold">{u.firstName} {u.lastName} {u.status === "BLOCKED" && <span className="chip ml-1 bg-red-100 text-red-700">bloklangan</span>}</div>
               <div className="font-mono text-xs text-muted">{formatPhone(u.phone)} · {u.district || u.region || "—"} · {fmtDate(u.createdAt)}</div>

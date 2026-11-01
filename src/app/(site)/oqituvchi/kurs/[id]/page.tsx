@@ -1,3 +1,4 @@
+import { Aurora } from "@/components/motion";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { asc, eq } from "drizzle-orm";
@@ -21,7 +22,8 @@ export default async function TeacherCourse({ params, searchParams }: { params: 
   const back = `/oqituvchi/kurs/${id}`;
   const approved = rows.filter((r) => r.status === "APPROVED").length;
   return (
-    <div className="container-x py-14">
+    <div className="container-x pb-14 pt-32">
+      <Aurora variant="cool" className="!fixed opacity-60" />
       <Link href="/oqituvchi" className="text-sm font-semibold text-muted hover:text-orange">← Kurslarim</Link>
       <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
         <div><div className="kicker">Arizalar va talabalar</div><h1 className="mt-2 h-title">{c.title}</h1></div>

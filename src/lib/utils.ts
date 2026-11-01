@@ -63,3 +63,6 @@ export const statusLabel = { PENDING: "Kutilmoqda", APPROVED: "Qabul qilindi", R
 
 export const str = (f: FormData, k: string) => String(f.get(k) ?? "").trim();
 export const isUrl = (s: string) => /^https?:\/\/\S+$/i.test(s);
+
+export const scheduleText = (s?: string | null) => (s && s.trim()) || "Jadval e’lon qilinadi";
+export const startText = (d?: Date | null) => (d ? fmtDate(d) : "Sana e’lon qilinadi");

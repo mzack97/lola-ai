@@ -1,3 +1,4 @@
+import { Aurora } from "@/components/motion";
 import Link from "next/link";
 import { and, eq, inArray, sql } from "drizzle-orm";
 import { db, courses, courseTeachers, enrollments } from "@/db";
@@ -17,7 +18,8 @@ export default async function TeacherHome() {
   const n = (id: string, s: string) => counts.find((x) => x.courseId === id && x.status === s)?.n ?? 0;
 
   return (
-    <div className="container-x py-14">
+    <div className="container-x pb-14 pt-32">
+      <Aurora variant="cool" className="!fixed opacity-60" />
       <CabinetHead user={u} title="Mening kurslarim" links={[{ href: "/oqituvchi", label: "Kurslarim", active: true }, { href: "/kabinet/profil", label: "Profil" }]} />
       {mine.length === 0 ? <Empty>Sizga hali kurs biriktirilmagan. Administrator kursga biriktirgach, u shu yerda paydo bo‘ladi.</Empty> : (
         <div className="grid gap-4 md:grid-cols-2">

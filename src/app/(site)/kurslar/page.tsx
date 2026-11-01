@@ -1,27 +1,24 @@
-import Link from "next/link";
 import { listCategories, listCourses } from "@/lib/queries";
-import { CourseCard, Empty } from "@/components/Cards";
+import { CourseExplorer } from "@/components/CourseExplorer";
+import { Aurora, Reveal, SplitHeadline } from "@/components/motion";
 
 export const metadata = { title: "Kurslar" };
 
 export default async function Courses({ searchParams }: { searchParams: Promise<{ yonalish?: string }> }) {
   const { yonalish } = await searchParams;
-  const [cats, courses] = await Promise.all([listCategories(), listCourses({ categorySlug: yonalish })]);
+  const [cats, courses] = await Promise.all([listCategories(), listCourses()]);
   return (
-    <div className="container-x py-14">
-      <div className="kicker mb-3">Katalog</div>
-      <h1 className="h-title">Kurslar</h1>
-      <p className="mt-3 max-w-2xl text-muted">Onlayn darslar Google Meet orqali o‘tadi. Kursni tanlang, ariza qoldiring — ustoz tasdiqlagach kurs xonangiz ochiladi.</p>
-      <div className="mt-8 flex flex-wrap gap-2">
-        <Link href="/kurslar" className={`chip px-4 py-2 text-sm ${!yonalish ? "bg-ink text-white" : ""}`}>Barchasi</Link>
-        {cats.map((c) => (
-          <Link key={c.id} href={`/kurslar?yonalish=${c.slug}`} className={`chip px-4 py-2 text-sm ${yonalish === c.slug ? "bg-ink text-white" : ""}`}>{c.name}</Link>
-        ))}
-      </div>
-      <div className="mt-8">
-        {courses.length ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{courses.map((c) => <CourseCard key={c.id} c={c} />)}</div>
-        ) : <Empty>Bu yo‘nalishda hozircha kurslar yo‘q.</Empty>}
+    <div className="relative pb-16 pt-32">
+      <Aurora variant="sunset" className="h-[70vh] opacity-80" />
+      <div className="container-x">
+        <div className="mb-12 grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
+          <div>
+            <Reveal><div className="kicker mb-5"><span className="h-1.5 w-1.5 rounded-full bg-orange" />Katalog · {courses.length} ta kurs</div></Reveal>
+            <SplitHeadline className="display text-[clamp(3rem,8vw,6rem)]" parts={[{ t: "Barcha" }, { t: "kurslar", accent: true }]} />
+          </div>
+          <Reveal delay={0.3}><p className="max-w-sm text-muted">Darslar Google Meet orqali jonli o‘tadi. Kursni tanlang, ariza qoldiring — ustoz tasdiqlagach kurs xonangiz ochiladi.</p></Reveal>
+        </div>
+        <CourseExplorer courses={courses} categories={cats} initial={yonalish ?? ""} />
       </div>
     </div>
   );

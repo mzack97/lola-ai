@@ -9,5 +9,5 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
   const u = await getUser();
   if (u) redirect(homeFor(u));
   const { next } = await searchParams;
-  return <AuthShell title="Kirish" sub="Telefon raqamingiz va parolingiz bilan kiring."><LoginForm next={next} /></AuthShell>;
+  return <AuthShell side="login" title="Xush" accent="kelibsiz" sub="Kurs xonangiz, darslar va ustozingiz sizni kutmoqda."><LoginForm next={next} /></AuthShell>;
 }

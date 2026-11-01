@@ -5,6 +5,7 @@ import { db, users } from "@/db";
 import { checkPassword, createSession, hashPassword, homeFor } from "@/lib/auth";
 import { normalizePhone, str } from "@/lib/utils";
 import { REGIONS } from "@/lib/regions";
+import { saveUpload } from "@/lib/uploads";
 
 export type FormState = { error?: string; ok?: string } | undefined;
 
@@ -36,9 +37,13 @@ export async function registerAction(_: FormState, f: FormData): Promise<FormSta
   const exists = await db.select({ id: users.id }).from(users).where(eq(users.phone, phone)).limit(1);
   if (exists[0]) return { error: "Bu raqam bilan allaqachon ro‘yxatdan o‘tilgan. «Kirish» sahifasidan foydalaning." };
 
+  let avatarUrl: string | null = null;
+  try { avatarUrl = await saveUpload(f.get("avatar"), "image"); }
+  catch (e) { return { error: (e as Error).message }; }
+
   const [u] = await db.insert(users).values({
     firstName, lastName, phone, passwordHash: await hashPassword(password),
-    birthDate, region: region || null, district: district || null,
+    birthDate, region: region || null, district: district || null, avatarUrl,
   }).returning();
   await createSession(u.id);
   redirect(safeNext(str(f, "next")) || homeFor(u));

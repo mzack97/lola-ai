@@ -3,6 +3,7 @@ import { useActionState, useState } from "react";
 import Link from "next/link";
 import { loginAction, registerAction, type FormState } from "@/app/actions/auth";
 import { NAMANGAN_DISTRICTS, REGIONS } from "@/lib/regions";
+import { ImageCropInput } from "./ImageCropInput";
 
 export function FormError({ state }: { state: FormState }) {
   if (!state?.error && !state?.ok) return null;
@@ -39,6 +40,7 @@ export function RegisterForm({ next }: { next?: string }) {
   return (
     <form action={action} className="space-y-4">
       <input type="hidden" name="next" value={next || ""} />
+      <ImageCropInput name="avatar" aspect={1} outWidth={400} round label="Profil rasmi (ixtiyoriy)" preview="avatar" hint="Xohlasangiz, rasmingizni qo‘shing — keyin ham qo‘shish mumkin." />
       <div className="grid gap-4 sm:grid-cols-2">
         <div><label className="label">Ism</label><input name="firstName" required autoComplete="given-name" className="input" /></div>
         <div><label className="label">Familiya</label><input name="lastName" required autoComplete="family-name" className="input" /></div>

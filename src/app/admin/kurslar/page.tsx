@@ -22,7 +22,7 @@ export default async function AdminCourses({ searchParams }: { searchParams: Pro
                 <td className="p-3 text-muted">{c.category ?? "—"}</td>
                 <td className="p-3">{c.teachers.join(", ") || <span className="font-semibold text-orange">biriktirilmagan</span>}</td>
                 <td className="p-3">{c.approved} / {c.capacity}</td>
-                <td className="p-3 text-muted">{fmtDate(c.startDate) || "—"}</td>
+                <td className="p-3 text-muted">{fmtDate(c.startDate) || "E’lon qilinadi"}</td>
                 <td className="p-3">{c.published ? <span className="chip bg-green-100 text-green-800">Nashr etilgan</span> : <span className="chip">Qoralama</span>}</td>
                 <td className="p-3 text-right"><div className="flex justify-end gap-2"><Link href={`/xona/${c.id}`} className="btn-ghost btn-sm">Xona</Link><Link href={`/admin/kurslar/${c.id}`} className="btn-dark btn-sm">Tahrirlash</Link></div></td>
               </tr>

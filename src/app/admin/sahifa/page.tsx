@@ -1,6 +1,7 @@
 import { getBlocks, getSettings, getTeam, SETTING_KEYS } from "@/lib/content";
 import { deleteTeamMember, saveBlock, saveSettings, saveTeamMember } from "@/app/actions/admin";
 import { AdminHead, Check, ConfirmButton, Field, Flash } from "@/components/AdminUi";
+import { ImageCropInput } from "@/components/ImageCropInput";
 
 const LABELS: Record<string, string> = { hero: "Bosh banner (hero)", about: "Loyiha haqida", freelance: "Frilans (tez kunda)", marketplace: "Marketplace (tez kunda)", contacts: "Aloqa bloki" };
 
@@ -32,7 +33,7 @@ export default async function LandingAdmin({ searchParams }: { searchParams: Pro
                 <div className="min-w-[160px] flex-1"><label className="label">Ism</label><input name="name" defaultValue={m.name} className="input" /></div>
                 <div className="min-w-[160px] flex-1"><label className="label">Vazifa</label><input name="role" defaultValue={m.role} className="input" /></div>
                 <div className="w-20"><label className="label">Tartib</label><input name="order" type="number" defaultValue={m.order} className="input" /></div>
-                <div className="w-full sm:w-auto"><label className="label">Rasm</label><input name="photo" type="file" accept="image/*" className="input py-2 text-xs" /></div>
+                <div className="w-full"><ImageCropInput name="photo" aspect={1} outWidth={600} round current={m.photoUrl} label="Rasm" preview="avatar" /></div>
                 <button className="btn-dark btn-sm mb-1.5">Saqlash</button>
               </form>
               <form action={deleteTeamMember}><input type="hidden" name="id" value={m.id} /><ConfirmButton>✕</ConfirmButton></form>
@@ -42,7 +43,7 @@ export default async function LandingAdmin({ searchParams }: { searchParams: Pro
             <div className="min-w-[160px] flex-1"><label className="label">Yangi a’zo — ism</label><input name="name" required className="input" /></div>
             <div className="min-w-[160px] flex-1"><label className="label">Vazifa</label><input name="role" className="input" /></div>
             <div className="w-20"><label className="label">Tartib</label><input name="order" type="number" defaultValue={team.length} className="input" /></div>
-            <div><label className="label">Rasm</label><input name="photo" type="file" accept="image/*" className="input py-2 text-xs" /></div>
+            <div className="w-full"><ImageCropInput name="photo" aspect={1} outWidth={600} round label="Rasm" preview="avatar" /></div>
             <button className="btn-primary btn-sm mb-1.5">Qo‘shish</button>
           </form>
         </div>

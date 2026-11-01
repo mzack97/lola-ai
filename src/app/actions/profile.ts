@@ -5,12 +5,16 @@ import { db, users } from "@/db";
 import { checkPassword, hashPassword, requireUser } from "@/lib/auth";
 import { str } from "@/lib/utils";
 import type { FormState } from "./auth";
+import { saveUpload } from "@/lib/uploads";
 
 export async function saveProfile(_: FormState, f: FormData): Promise<FormState> {
   const u = await requireUser();
   const firstName = str(f, "firstName"), lastName = str(f, "lastName");
   if (firstName.length < 2 || lastName.length < 2) return { error: "Ism va familiyani to‘liq kiriting." };
-  await db.update(users).set({ firstName, lastName, region: str(f, "region") || null, district: str(f, "district") || null }).where(eq(users.id, u.id));
+  let avatarUrl: string | null | undefined;
+  try { avatarUrl = await saveUpload(f.get("avatar"), "image"); } catch (e) { return { error: (e as Error).message }; }
+  await db.update(users).set({ firstName, lastName, region: str(f, "region") || null, district: str(f, "district") || null, ...(avatarUrl ? { avatarUrl } : {}) }).where(eq(users.id, u.id));
+  revalidatePath("/", "layout");
   revalidatePath("/kabinet/profil");
   return { ok: "Saqlandi." };
 }

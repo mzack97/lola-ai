@@ -19,6 +19,7 @@ export const users = pgTable("users", {
   birthDate: timestamp("birth_date", { mode: "date" }),
   region: text("region"),
   district: text("district"),
+  avatarUrl: text("avatar_url"),
   role: roleEnum("role").notNull().default("STUDENT"),
   status: userStatusEnum("status").notNull().default("ACTIVE"),
   createdAt: created(),

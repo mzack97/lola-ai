@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { Avatar } from "./Avatar";
 
-type Msg = { id: string; text: string; pinned: boolean; createdAt: string; authorId: string; first: string; last: string; role: string };
+type Msg = { id: string; text: string; pinned: boolean; createdAt: string; authorId: string; first: string; last: string; role: string; avatar: string | null };
 
 const URL_RE = /(https?:\/\/[^\s]+)/g;
 function Linkified({ text }: { text: string }) {
@@ -77,16 +78,17 @@ export function Chat({ sectionId, meId, canModerate }: { sectionId: string; meId
   }
 
   return (
-    <div className="card flex h-[560px] flex-col overflow-hidden">
+    <div className="card flex h-[600px] flex-col overflow-hidden">
       <div ref={box} onScroll={(e) => { const el = e.currentTarget; stick.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80; }}
-        className="flex-1 space-y-3 overflow-y-auto bg-[linear-gradient(#fff,#fcfbfa)] p-4">
+        data-lenis-prevent className="flex-1 space-y-3 overflow-y-auto p-4">
         {!loaded && <div className="text-center text-sm text-muted">Yuklanmoqda…</div>}
         {loaded && msgs.length === 0 && <div className="py-16 text-center text-sm text-muted">Hozircha xabarlar yo‘q. Birinchi bo‘lib yozing!</div>}
         {msgs.map((m) => {
           const mine = m.authorId === meId;
           const staff = m.role !== "STUDENT";
           return (
-            <div key={m.id} className={`group flex ${mine ? "justify-end" : "justify-start"}`}>
+            <div key={m.id} className={`group flex items-end gap-2 ${mine ? "flex-row-reverse" : ""}`}>
+              <Avatar src={m.avatar} name={`${m.first} ${m.last}`} size={30} />
               <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-6 ${mine ? "rounded-br-md bg-ink text-white" : staff ? "rounded-bl-md border border-orange/30 bg-cream" : "rounded-bl-md bg-[#f3efeb]"}`}>
                 <div className={`mb-0.5 flex items-center gap-2 text-[11px] font-bold ${mine ? "text-white/60" : "text-muted"}`}>
                   <span>{m.first} {m.last}</span>
@@ -100,7 +102,7 @@ export function Chat({ sectionId, meId, canModerate }: { sectionId: string; meId
           );
         })}
       </div>
-      <form onSubmit={send} className="flex gap-2 border-t border-line bg-white p-3">
+      <form onSubmit={send} className="flex gap-2 border-t border-white/60 bg-white/40 p-3">
         <textarea value={text} onChange={(e) => setText(e.target.value)} rows={1} placeholder="Xabar yozing…"
           onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(e); } }}
           className="input min-h-[44px] resize-none" />

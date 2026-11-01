@@ -9,5 +9,5 @@ export default async function Register({ searchParams }: { searchParams: Promise
   const u = await getUser();
   if (u) redirect(homeFor(u));
   const { next } = await searchParams;
-  return <AuthShell title="Ro‘yxatdan o‘tish" sub="Bir daqiqada hisob oching va kurslarga ariza qoldiring."><RegisterForm next={next} /></AuthShell>;
+  return <AuthShell side="register" title="Kelajak kasbingiz" accent="shu yerdan" sub="Bir daqiqada hisob oching, kursni tanlang va jonli darslarga qo‘shiling."><RegisterForm next={next} /></AuthShell>;
 }

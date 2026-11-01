@@ -12,9 +12,20 @@
 - [x] Admin: dashboard, landing blocks, team, contacts, news, categories, courses + teacher assignment, enrollments overview, users (role, block, reset password, create)
 - [x] Deploy kit: Dockerfile, docker-compose, Caddy HTTPS, backups, update script, README
 
+## Round 2 — design + fixes (done)
+- [x] Fixed: banner images not showing on server (image route was skipped by .gitignore)
+- [x] Liquid-glass design system, Bricolage Grotesque + Instrument Serif, grain, aurora backgrounds
+- [x] Smooth scrolling (Lenis), page transitions, scroll reveals, tilt cards, tickers, pinned "how it works", scroll-lit text
+- [x] Each page has its own feature: hero 3D visual, sticky animated catalog filter + search, parallax course page with curriculum, magazine news + reading progress, dark/light coming-soon pages, split auth pages
+- [x] Course form: "E’lon qilinadi" switches for schedule and start date
+- [x] Image cropper window (type + size limits, live card/avatar preview) for course covers, news, team, profile photos
+- [x] Optional profile photo at registration; editable in profile; shown in header, chat, admin
+- [x] Catalog filters: instant, animated, URL-synced, with counts
+
 ## Phase 5 — launch
-- [ ] Domain + server bought
-- [ ] Code on GitHub
+- [x] Domain + server bought
+- [x] Code on GitHub
+- [x] Running at https://89-31-29-131.sslip.io (temporary)
 - [ ] Deployed to lola-ai.uz, admin login works
 - [ ] Real content: courses, teachers, team photos, contacts
 - [ ] Pilot: 1 course, 1 teacher, ~10 students

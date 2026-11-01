@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import "@fontsource-variable/manrope";
 import "@fontsource/jetbrains-mono/500.css";
 import "@fontsource/jetbrains-mono/700.css";
+import "@fontsource-variable/bricolage-grotesque";
+import "@fontsource/instrument-serif/400.css";
+import "@fontsource/instrument-serif/400-italic.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,7 +17,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="uz">
-      <body className="min-h-screen">{children}</body>
+      <body className="grain min-h-screen">{children}</body>
     </html>
   );
 }

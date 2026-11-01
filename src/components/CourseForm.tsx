@@ -4,6 +4,8 @@ import { listCategories } from "@/lib/queries";
 import { saveCourse } from "@/app/actions/admin";
 import { Check, Field } from "./AdminUi";
 import { toDateInput } from "@/lib/utils";
+import { ImageCropInput } from "./ImageCropInput";
+import { TbaInput } from "./TbaInput";
 
 export async function CourseForm({ c, teacherIds = [] }: { c?: Course; teacherIds?: string[] }) {
   const [cats, teachers] = await Promise.all([
@@ -18,10 +20,8 @@ export async function CourseForm({ c, teacherIds = [] }: { c?: Course; teacherId
         {c && <Field label="Manzil (slug)" hint={`lola-ai.uz/kurslar/${c.slug}`}><input name="slug" defaultValue={c.slug} className="input font-mono" /></Field>}
         <Field label="Qisqa tavsif" hint="Kurs kartasida ko‘rinadi (1–2 gap)"><input name="summary" defaultValue={c?.summary} className="input" /></Field>
         <Field label="To‘liq tavsif" hint="Kimlar uchun, nimani o‘rganadi, natija"><textarea name="description" rows={10} defaultValue={c?.description} className="input" /></Field>
-        <Field label="Muqova rasmi (JPG/PNG, 16:9)"><input name="cover" type="file" accept="image/*" className="input py-2" /></Field>
-        {c?.coverUrl && (<div className="flex items-center gap-4">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={c.coverUrl} alt="" className="h-20 rounded-lg" /><Check name="removeCover" label="Rasmni olib tashlash" /></div>)}
+        <ImageCropInput name="cover" aspect={16 / 9} outWidth={1600} current={c?.coverUrl} label="Muqova (banner)" preview="card" hint="Tavsiya: gorizontal rasm. Tanlagandan so‘ng kartada qanday ko‘rinishini ko‘rib, kesib olasiz." />
+        {c?.coverUrl && <Check name="removeCover" label="Joriy muqovani olib tashlash" />}
       </div>
       <div className="space-y-6">
         <div className="card space-y-4 p-6">
@@ -29,8 +29,8 @@ export async function CourseForm({ c, teacherIds = [] }: { c?: Course; teacherId
             <select name="categoryId" defaultValue={c?.categoryId ?? ""} className="input"><option value="">—</option>{cats.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select>
           </Field>
           <Field label="Format"><input name="format" defaultValue={c?.format ?? "Onlayn · Google Meet"} className="input" /></Field>
-          <Field label="Jadval" hint="Masalan: Du, Cho, Ju · 18:00"><input name="schedule" defaultValue={c?.schedule} className="input" /></Field>
-          <Field label="Boshlanish sanasi"><input name="startDate" type="date" defaultValue={toDateInput(c?.startDate)} className="input" /></Field>
+          <TbaInput name="schedule" label="Jadval" defaultValue={c?.schedule} placeholder="Du, Cho, Ju · 18:00" hint="Masalan: Du, Cho, Ju · 18:00" />
+          <TbaInput name="startDate" type="date" label="Boshlanish sanasi" defaultValue={toDateInput(c?.startDate)} />
           <Field label="Guruh sig‘imi"><input name="capacity" type="number" min={1} defaultValue={c?.capacity ?? 30} className="input" /></Field>
           <Check name="autoApprove" label="Arizalarni avtomatik qabul qilish" defaultChecked={c?.autoApprove} />
           <Check name="published" label="Saytda nashr etish" defaultChecked={c?.published} />

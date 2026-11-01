@@ -1,3 +1,4 @@
+import { Aurora } from "@/components/motion";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { and, asc, desc, eq, gte } from "drizzle-orm";
@@ -43,12 +44,13 @@ export default async function Room({ params, searchParams }: { params: Promise<{
   const tabLink = (k: string) => `/xona/${courseId}?b=${current?.id}${k === "chat" ? "" : `&t=${k}`}`;
 
   return (
-    <div className="container-x py-10">
+    <div className="container-x pb-14 pt-32">
+      <Aurora variant="cool" className="!fixed opacity-60" />
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <Link href={manage ? (user.role === "ADMIN" ? "/admin/kurslar" : "/oqituvchi") : "/kabinet"} className="text-sm font-semibold text-muted hover:text-orange">← Orqaga</Link>
-          <div className="kicker mt-4">Kurs xonasi {manage && "· boshqaruv rejimi"}</div>
-          <h1 className="mt-2 text-3xl font-extrabold tracking-tight">{course.title}</h1>
+          <Link href={manage ? (user.role === "ADMIN" ? "/admin/kurslar" : "/oqituvchi") : "/kabinet"} className="btn-ghost btn-sm">← Orqaga</Link>
+          <div className="mt-5"><span className="kicker">Kurs xonasi {manage && "· boshqaruv rejimi"}</span></div>
+          <h1 className="display mt-3 text-[clamp(2.2rem,5vw,3.8rem)]">{course.title}</h1>
           {course.schedule && <p className="mt-1 text-sm text-muted">{course.schedule}</p>}
         </div>
       </div>

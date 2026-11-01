@@ -14,7 +14,7 @@ async function guard(sectionId: string) {
   return { u, s, access };
 }
 
-const select = { id: messages.id, text: messages.text, pinned: messages.pinned, createdAt: messages.createdAt, authorId: messages.authorId, first: users.firstName, last: users.lastName, role: users.role };
+const select = { id: messages.id, text: messages.text, pinned: messages.pinned, createdAt: messages.createdAt, authorId: messages.authorId, first: users.firstName, last: users.lastName, role: users.role, avatar: users.avatarUrl };
 
 /** GET ?after=ISO → new messages since that time (the room polls this every few seconds) */
 export async function GET(req: Request, { params }: { params: Promise<{ sectionId: string }> }) {
@@ -38,7 +38,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ section
   const text = String(body.text ?? "").trim().slice(0, 4000);
   if (!text) return NextResponse.json({ error: "empty" }, { status: 400 });
   const [m] = await db.insert(messages).values({ sectionId, authorId: g.u.id, text }).returning();
-  return NextResponse.json({ message: { ...m, first: g.u.firstName, last: g.u.lastName, role: g.u.role } });
+  return NextResponse.json({ message: { ...m, first: g.u.firstName, last: g.u.lastName, role: g.u.role, avatar: g.u.avatarUrl } });
 }
 
 /** DELETE ?id= → author, teacher or admin can remove a message */
