@@ -1,26 +1,33 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-ink: #121212;
+  --color-ink-2: #2a2a2a;
+  --color-muted: #6b6b6b;
+  --color-line: #e9e4df;
+  --color-paper: #faf8f6;
+  --color-cream: #fbebdd;
+  --color-orange: #ff531e;
+  --color-orange-2: #ff7a45;
+  --color-ok: #1aa260;
+  --font-sans: "Manrope Variable", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+html { background: var(--color-paper); color: var(--color-ink); }
+body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+@utility container-x { @apply mx-auto w-full max-w-6xl px-4 sm:px-6; }
+@utility btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition active:scale-[.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer; }
+@utility btn-primary { @apply btn bg-orange text-white hover:bg-[#e8461a]; }
+@utility btn-dark { @apply btn bg-ink text-white hover:bg-ink-2; }
+@utility btn-ghost { @apply btn border border-line bg-white text-ink hover:border-ink/30; }
+@utility btn-sm { @apply px-3.5 py-1.5 text-xs; }
+@utility btn-danger { @apply btn border border-red-200 bg-white text-red-600 hover:bg-red-50; }
+@utility input { @apply w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm outline-none transition focus:border-orange focus:ring-4 focus:ring-orange/10; }
+@utility label { @apply mb-1.5 block text-xs font-bold uppercase tracking-wider text-muted; }
+@utility card { @apply rounded-2xl border border-line bg-white; }
+@utility chip { @apply inline-flex items-center rounded-full bg-[#f3efeb] px-2.5 py-1 text-xs font-bold text-ink-2; }
+@utility kicker { @apply font-mono text-xs font-bold uppercase tracking-[.2em] text-orange; }
+@utility h-title { @apply text-3xl font-extrabold tracking-tight sm:text-4xl; }
+@utility prose-lola { @apply text-[15px] leading-7 text-ink-2 whitespace-pre-line; }

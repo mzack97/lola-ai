@@ -1,0 +1,59 @@
+# LOLA AI — everything that runs on the server.
+# Start / update:  docker compose up -d --build
+services:
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: lola
+      POSTGRES_USER: lola
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lola -d lola"]
+      interval: 5s
+      retries: 20
+
+  # runs database migrations + first-time setup, then exits
+  migrate:
+    build: { context: ., target: builder }
+    environment:
+      DATABASE_URL: postgresql://lola:${DB_PASSWORD}@db:5432/lola
+      ADMIN_PHONE: ${ADMIN_PHONE}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      ADMIN_FIRST_NAME: ${ADMIN_FIRST_NAME:-Admin}
+      ADMIN_LAST_NAME: ${ADMIN_LAST_NAME:-LOLA AI}
+    command: sh -c "npm run db:migrate && npm run db:seed"
+    depends_on:
+      db: { condition: service_healthy }
+
+  app:
+    build: { context: ., target: runner }
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://lola:${DB_PASSWORD}@db:5432/lola
+      SITE_URL: https://${DOMAIN}
+    volumes:
+      - uploads:/app/uploads
+    depends_on:
+      db: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
+
+  caddy:
+    image: caddy:2-alpine
+    restart: always
+    ports: ["80:80", "443:443"]
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddydata:/data
+      - caddyconfig:/config
+    depends_on: [app]
+
+volumes:
+  dbdata:
+  uploads:
+  caddydata:
+  caddyconfig:

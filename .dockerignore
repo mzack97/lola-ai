@@ -1,0 +1,8 @@
+node_modules
+.next
+uploads
+backups
+.env
+.env.*
+!.env.example
+.git
