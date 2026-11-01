@@ -49,17 +49,29 @@ Type `yes` when asked, then the root password (nothing is shown while typing; th
 ```
 curl -fsSL https://get.docker.com | sh
 ufw allow 22 && ufw allow 80 && ufw allow 443 && ufw --force enable
+fallocate -l 2G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile && echo '/swapfile none swap sw 0 0' >> /etc/fstab
 ```
+
+The last line adds 2 GB of "spare memory" (swap). It lets a small 2 GB server build the site without running out of memory.
 
 ### 4. Get the code onto the server
 
+The repository is private, so the server needs a read-only key ("deploy key"):
+
+```
+ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519 -C "lola-server"
+cat ~/.ssh/id_ed25519.pub
+```
+
+Copy the line that starts with `ssh-ed25519`. On GitHub open the repository → **Settings → Deploy keys → Add deploy key**, paste it, title it `server`, leave "Allow write access" **unticked**, and click **Add key**. Then:
+
 ```
 cd /root
-git clone https://github.com/YOUR_GITHUB_NAME/lola-ai.git
+git clone git@github.com:YOUR_GITHUB_NAME/lola-ai.git
 cd lola-ai
 ```
 
-(For a private repository GitHub will ask for your username and a *personal access token* instead of a password.)
+Type `yes` if it asks about GitHub's fingerprint.
 
 ### 5. Fill in the settings
 
