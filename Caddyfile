@@ -10,3 +10,8 @@
 www.{$DOMAIN} {
 	redir https://{$DOMAIN}{uri} permanent
 }
+
+# Temporary address used before lola-ai.uz was active: send visitors to the real domain.
+89-31-29-131.sslip.io {
+	redir https://lola-ai.uz{uri} permanent
+}
